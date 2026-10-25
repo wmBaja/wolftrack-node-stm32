@@ -19,13 +19,13 @@ Replace the example port name with the board's port.
 Linux:
 
 ```sh
-stty -F /dev/ttyACM0 1200
+stty -F /dev/ttyACM* 1200
 ```
 
 Windows (CMD or PowerShell):
 
 ```text
-mode COM5 BAUD=1200
+mode COM* BAUD=1200
 ```
 
 macOS:
@@ -38,14 +38,22 @@ stty -f /dev/cu.usbmodem* 1200
 
 `scripts/dfu_upload.py` discovers a single `0483:5740` application port,
 touches it at 1200 baud, requires exactly one `0483:df11` DFU device, flashes
-it, and waits for the application device to return. It needs Python 3 plus
-`pyserial` and `pyusb`:
+it, and returns after the transfer. It needs Python 3 plus `pyserial` and
+`pyusb`:
 
 ```sh
 python3 -m pip install pyserial pyusb
-python3 scripts/dfu_upload.py build/Debug/wolftrack-node.elf
-python3 scripts/dfu_upload.py --tool dfu-util build/Debug/wolftrack-node.bin
+python3 scripts/dfu_upload.py build/Debug/wolftrack-node.bin
+python3 scripts/dfu_upload.py --tool stm32-programmer build/Debug/wolftrack-node.elf
 ```
+
+The helper automatically chooses `dfu-util` for a `.bin` image and STM32
+Programmer for other image types. STM32 ROM DFU resets immediately after a
+successful `:leave` request, which causes `dfu-util` 0.11 to return status 74
+while attempting its final status check; the helper recognizes that completed
+transfer and reports it as successful. Its output remains live while the
+transfer runs. The helper waits for the application CDC device to re-enumerate
+by default; add `--no-verify-application` to skip that check.
 
 To flash an already-running ROM bootloader, add `--skip-touch`. Specify
 `--port COM5` (or its Unix device path) if automatic application-port discovery
