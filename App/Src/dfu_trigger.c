@@ -25,6 +25,7 @@ bool dfu_is_1200_baud_request(const uint8_t *buf, uint16_t len)
 #include "usbd_core.h"
 
 #define DFU_SYSTEM_MEMORY_BASE (0x1FFF0000UL)
+#define DFU_POST_LEAVE_RESET_MAGIC (0xDF59B008UL)
 
 static volatile uint8_t s_dfu_requested = 0U;
 
@@ -43,11 +44,20 @@ void app_early_boot_dfu_check(void)
   __HAL_RCC_PWR_CLK_ENABLE();
   HAL_PWR_EnableBkUpAccess();
 
+  /* ROM DFU can enter the application without a peripheral reset.  Complete
+     one self-clearing reset so the application always starts from reset state. */
+  if (TAMP->BKP1R == DFU_POST_LEAVE_RESET_MAGIC) {
+    TAMP->BKP1R = 0x00000000UL;
+    __DSB();
+    NVIC_SystemReset();
+  }
+
   if (TAMP->BKP0R != DFU_BOOT_MAGIC_WORD) {
     return;
   }
 
   TAMP->BKP0R = 0x00000000UL;
+  TAMP->BKP1R = DFU_POST_LEAVE_RESET_MAGIC;
   __DSB();
 
   __HAL_RCC_GPIOA_CLK_ENABLE();
