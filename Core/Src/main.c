@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "dfu_trigger.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,6 +99,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+
+  app_early_boot_dfu_check();
 
   /* USER CODE END 1 */
 
@@ -793,6 +797,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+    app_poll_dfu_trigger();
     osDelay(1);
   }
   /* USER CODE END 5 */
