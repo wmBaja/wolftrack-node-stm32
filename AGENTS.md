@@ -4,7 +4,7 @@ Repo: `wolftrack-node-stm32` (CubeMX CMake project, STM32G473CEU6, FreeRTOS via 
 Reference: Local directory `reference/` (specifically `reference/wolftrack-embedded/bajacan/`, cloned from https://github.com/wmBaja/wolftrack-embedded), an Arduino/C++ AVR128DB32 node, plus any datasheets/reference notes placed in `reference/`.
 Goal: reproduce its structure (board config tables, sensor descriptors, message groups, CAN control) as idiomatic FreeRTOS C++ on this MCU (CubeMX-generated files stay C). Front and rear boards use the same PCB and the same `.ioc`; they differ only in the sensors connected, selected at build time.
 
-**Workflow Rule:** Work one phase (if it is structured with phases) at a time from `PLAN.md`. After each phase: build, commit, report (using the format at the bottom of this file), then wait for me.
+**Workflow Rule:** Work one phase (if it is structured with phases) at a time from `PLAN.md`. After each phase: build, report (using the format at the bottom of this file), then wait for me. Do not write git commits.
 
 ---
 
