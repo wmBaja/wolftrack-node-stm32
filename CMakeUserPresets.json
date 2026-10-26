@@ -1,0 +1,31 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "front-debug",
+            "inherits": "Debug",
+            "binaryDir": "${sourceDir}/build/front-debug",
+            "cacheVariables": {
+                "BOARD": "FRONT"
+            }
+        },
+        {
+            "name": "rear-debug",
+            "inherits": "Debug",
+            "binaryDir": "${sourceDir}/build/rear-debug",
+            "cacheVariables": {
+                "BOARD": "REAR"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "front-debug",
+            "configurePreset": "front-debug"
+        },
+        {
+            "name": "rear-debug",
+            "configurePreset": "rear-debug"
+        }
+    ]
+}

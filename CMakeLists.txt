@@ -43,20 +43,42 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add sources to executable
+# User C++ and board-selection configuration.
+enable_language(CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(BOARD "FRONT" CACHE STRING "Sensor board variant (FRONT or REAR)")
+set_property(CACHE BOARD PROPERTY STRINGS FRONT REAR)
+
+if(BOARD STREQUAL "FRONT")
+    set(BOARD_SOURCE Board/board_front.cpp)
+    set(BOARD_DEFINE BOARD_FRONT=1)
+elseif(BOARD STREQUAL "REAR")
+    set(BOARD_SOURCE Board/board_rear.cpp)
+    set(BOARD_DEFINE BOARD_REAR=1)
+else()
+    message(FATAL_ERROR "BOARD must be FRONT or REAR; got '${BOARD}'")
+endif()
+
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     App/Src/dfu_trigger.c
+    ${BOARD_SOURCE}
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     App/Inc
+    Board
 )
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
+    ${BOARD_DEFINE}
 )
 
 # Remove wrong libob.a library dependency when using cpp files
