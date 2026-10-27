@@ -13,7 +13,7 @@ Goal: reproduce its structure (board config tables, sensor descriptors, message 
 **Environment**
 - Do not flash or run on target. "Verified" means: firmware builds, host unit tests pass, memory use is sane.
 - Reference materials live locally in `reference/` (git-ignored). Read the reference codebase and any datasheets from `reference/` first before attempting web fetches. Do not modify or commit anything inside `reference/`.
-- Build: `cube-cmake --preset Debug`, then `cube-cmake --build build/Debug`. In my VS Code session it lives at `~/.vscode/extensions/stmicroelectronics.stm32cube-ide-build-cmake-*/resources/cube-cmake/linux/x86_64`. If it is not on PATH, try that path. If that fails, stop and tell me. Do not install packages or change `.vscode/settings.json`.
+- Build: `cube-cmake --preset Debug`, then `cube-cmake --build build/Debug`. In my VS Code session it lives at `~/.vscode/extensions/stmicroelectronics.stm32cube-ide-build-cmake-*/resources/cube-cmake/linux/x86_64`. If it is not on PATH, try that path. If `cube-cmake` is unavailable or cannot run because its `cube` dependency is unavailable, fall back to `cmake --preset Debug`, then `cmake --build build/Debug`, and report that the fallback was used. Do not install packages or change `.vscode/settings.json`.
 - Baseline from my last build: target `projects` (or `wolftrack-node-stm32` if renamed in `.ioc`), output `build/Debug/*.elf`, FLASH 30896 B ($5.89\%$), RAM 9792 B ($7.47\%$). FreeRTOS uses `heap_4` and the `ARM_CM4F` port. The HAL timebase is a TIM (`stm32g4xx_hal_timebase_tim.c`), not SysTick.
 - Compiled HAL modules include ADC, FDCAN, I2C, SPI, TIM, DMA, PCD (plus `USB_Device` CDC middleware for `0483:5740`). There is no UART HAL. Debug output goes through ITM/SWO (PB3).
 
