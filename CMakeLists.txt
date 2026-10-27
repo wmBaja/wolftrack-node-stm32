@@ -65,6 +65,7 @@ string(TOLOWER "${BOARD}" BOARD_NAME)
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    App/Src/app_logic.cpp
     App/Src/dfu_trigger.c
     App/Src/usb_identity.c
     ${BOARD_SOURCE}
