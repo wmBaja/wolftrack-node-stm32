@@ -24,6 +24,7 @@
 /* USER CODE BEGIN INCLUDE */
 
 #include "dfu_trigger.h"
+#include "usb_identity.h"
 
 /* USER CODE END INCLUDE */
 
@@ -235,6 +236,12 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
     break;
 
     case CDC_SET_CONTROL_LINE_STATE:
+
+      if (pbuf != NULL) {
+        const USBD_SetupReqTypedef *request =
+            (const USBD_SetupReqTypedef *)pbuf;
+        app_usb_identity_on_dtr((request->wValue & 0x0001U) != 0U);
+      }
 
     break;
 

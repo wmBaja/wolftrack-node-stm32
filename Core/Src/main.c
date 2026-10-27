@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 
 #include "dfu_trigger.h"
+#include "usb_identity.h"
 
 /* USER CODE END Includes */
 
@@ -798,6 +799,7 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     app_poll_dfu_trigger();
+    app_poll_usb_identity();
     osDelay(1);
   }
   /* USER CODE END 5 */

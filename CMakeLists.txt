@@ -61,10 +61,12 @@ elseif(BOARD STREQUAL "REAR")
 else()
     message(FATAL_ERROR "BOARD must be FRONT or REAR; got '${BOARD}'")
 endif()
+string(TOLOWER "${BOARD}" BOARD_NAME)
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     App/Src/dfu_trigger.c
+    App/Src/usb_identity.c
     ${BOARD_SOURCE}
 )
 
@@ -79,6 +81,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
     ${BOARD_DEFINE}
+    APP_BOARD_NAME=\"${BOARD_NAME}\"
+    APP_BUILD_TYPE=\"${CMAKE_BUILD_TYPE}\"
 )
 
 # Remove wrong libob.a library dependency when using cpp files
